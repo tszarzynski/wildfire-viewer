@@ -1,48 +1,65 @@
 <html xmlns:ng="http://angularjs.org" ng-app lang="en">
 <head>
     <meta charset="utf-8">
-
+    <title>Wildfire Image Viewer</title>
     <link rel="stylesheet" type="text/css" href="fonts/stylesheet.css">
     <link href="css/topcoat-desktop-light.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
 
+
+
 </head>
-<body class="light">
+<body class="light" ng-controller="CsvCtrl">
     <script type="text/javascript">var sortingOrder = 'Email';</script>
     <header class="header">
-        <h1 class="header__title">Wild Viewer</h1>
+        <h1 class="header__title">Wildfire Image Viewer</h1>
 
+
+    
         <div class="upload">
-            <div>{{theFile.name}}</div>
+            
+            <div class="upload__legend">
+                <div>File name: {{theFile.name}}</div>
+                <div>Localisation: 
+                    <span  class="nullable">
+                    <select ng-model="localisation" ng-options="l.id for l in localisations">
+                        <option value="">-- auto detect --</option>
+                    </select>
+                    </span>
+                </div>
+            </div>
+
             <input class="upload__btn" type="file" id="files" name="files[]" onchange="scope.setFile(this)"/>
+            
         </div>
     </header>
     <div id="content">
 
-        <div ng-controller="CsvCtrl">
+        <div>
 
 
             <div class='buttons-bar'>
 
+                <!-- Search -->
                 <div class="search topcoat-button-bar">
-
-                <input type="text" ng-model="query" ng-change="search()" class="topcoat-search-input" placeholder="Search">
-                <button class="topcoat-button" ng-click="clearSearch()">Clear</button>
-            </div>
-
-            <div class="pagination topcoat-button-bar">
-                <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == 0}">
-                    <button class="topcoat-button" ng-click="prevPage()">« Prev</button>
+                    <input type="text" ng-model="query" ng-change="search()" class="topcoat-search-input--large" placeholder="Search">
+                    <button class="search-clear topcoat-button--large" ng-click="clearSearch()">Clear</button>
                 </div>
 
-                <div class="topcoat-button-bar__item" ng-repeat="n in range(pagedItems.length)">
-                    <button class="topcoat-button--quiet" ng-bind="n + 1" ng-disabled="n == currentPage" ng-click="setPage()">1</button>
+                <!-- Pagination -->
+                <div class="pagination topcoat-button-bar">
+                    <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == 0}">
+                        <button class="topcoat-button--large" ng-click="prevPage()">« Prev</button>
+                    </div>
+
+                    <div class="topcoat-button-bar__item" ng-repeat="n in range(pagedItems.length)">
+                        <button class="topcoat-button--large--quiet" ng-bind="n + 1" ng-disabled="n == currentPage" ng-click="setPage()">1</button>
+                    </div>
+                    <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                        <button class="topcoat-button--large" ng-click="nextPage()">Next »</button>
+                    </div>
                 </div>
-                <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == pagedItems.length - 1}">
-                    <button class="topcoat-button" ng-click="nextPage()">Next »</button>
-                </div>
-            </div>
             </div>
             
 
@@ -51,35 +68,36 @@
             <ul class="list" >
                 <li class="list__item" ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse">
                     <div class="list-item__inner">
-                    <img class="list-item__img" ng-src="{{item['Uplaod_photo']}}">
+                    <img class="list-item__img" ng-src="{{item['Upload_photo']}}">
                         <div class="list-item__desc">
-                            <h3>{{item['First_Name']}} {{item['Last_Name']}}</h3>
-                            <h4>{{item['Email']}}</h4>
+                            <h2 class="list-item-desc__username">{{item['First_Name']}} {{item['Last_Name']}}</h2>
+                            <p class="list-item-desc__email">{{item['Email']}}</p>
                         </div>
                     </div>
                 </li>
             </ul>
 
             <div class='buttons-bar'>
-            <div class="pagination topcoat-button-bar">
-                <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == 0}">
-                    <button class="topcoat-button" ng-click="prevPage()">« Prev</button>
-                </div>
+                <!-- Pagination -->
+                <div class="pagination topcoat-button-bar">
+                    <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == 0}">
+                        <button class="topcoat-button--large" ng-click="prevPage()">« Prev</button>
+                    </div>
 
-                <div class="topcoat-button-bar__item" ng-repeat="n in range(pagedItems.length)">
-                    <button class="topcoat-button--quiet" ng-bind="n + 1" ng-disabled="n == currentPage" ng-click="setPage()">1</button>
-                </div>
-                <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == pagedItems.length - 1}">
-                    <button class="topcoat-button" ng-click="nextPage()">Next »</button>
+                    <div class="topcoat-button-bar__item" ng-repeat="n in range(pagedItems.length)">
+                        <button class="topcoat-button--large--quiet" ng-bind="n + 1" ng-disabled="n == currentPage" ng-click="setPage()">1</button>
+                    </div>
+                    <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                        <button class="topcoat-button--large" ng-click="nextPage()">Next »</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
         </div>
 
     </div>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
 
     <script src="js/csvjson.min.js"></script>

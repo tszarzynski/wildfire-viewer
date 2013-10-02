@@ -28,33 +28,6 @@ h1 {
   background: inherit;
   position: relative;
 }
-#site {
-  width: 100%;
-  position: relative;
-  z-index: 10;
-  background: inherit;
-  left: 0;
-  transition: all 0.2s ease-out;
-  -webkit-transition: all 0.2s ease-out;
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-}
-#site:before{
-  position: absolute;
-  content: '';
-  left: -4px;
-  height: 100%;
-  width: 4px;
-  background: #3B3E3E;
-}
-#site.open {
-  transform: translate3d(250px, 0, 0);
-  -webkit-transform: translate3d(250px, 0, 0);
-}
-pre {
-  font-family: source-code-pro, sans-serif;
-  font-size: 12px;
-}
 
 /* Content */
 #content {
@@ -63,14 +36,6 @@ pre {
   box-sizing: border-box;
   padding: 0 20px;
 }
-
-
-
-
-
-
-
-
 
 
 .header {
@@ -90,9 +55,17 @@ pre {
   margin-top: 20px;
 }
 
-.upload__btn {
-
+.upload__legend {
+  float: left;
+  margin-right: 12px;
+  margin-top: 6px;
 }
+
+.upload__btn {
+  float: left;
+}
+
+
 
 .upload__btn::-webkit-file-upload-button {
   visibility: hidden;
@@ -129,15 +102,21 @@ pre {
 
 .buttons-bar
 {
-  margin: 12px 0;
 }
 
 .search {
   float: left;
+  padding: 12px 0;
+  clear: both;
+}
+
+.search-clear {
+  margin-left: 12px;
 }
 
 .pagination {
   float:right;
+  padding: 12px 0;
 }
 
 
@@ -147,7 +126,7 @@ pre {
 }
 
 .list__item {
-   width: 33%;
+   max-width: 33%;
    position: relative;
    overflow: hidden;
    float: left;
@@ -158,12 +137,14 @@ pre {
 }
 
 .list-item__inner {
-  padding: 10px;
-   overflow: hidden;
+  padding: 20px;
+  overflow: hidden;
+  display: inline-block;
 }
 
 .list-item__img {
-   width: 100%;
+   max-height: 480px;
+  width: auto;
 }
 
 .list-item__desc {
@@ -171,13 +152,36 @@ pre {
    padding: 10px;
    text-align: left;
 
-   border: 1px solid #E0E0E0;
--moz-box-sizing: border-box;
-box-sizing: border-box;
+   border-top: 1px solid #E0E0E0;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
--moz-border-radius: 1px;
--webkit-border-radius: 1px;
-border-radius: 1px;
+.list-item-desc__username:before {
+  content: " ";
+  background: url(user.svg) no-repeat;
+  width: 20px;
+  display: inline-block;
+  height: 14px;
+  background-size: 13px 13px;
+}
+
+.list-item-desc__email:before {
+  content: " ";
+  background: url(email.svg) no-repeat;
+  width: 20px;
+  display: inline-block;
+  height: 11px;
+  background-size: 13px 13px;
+}
+
+.list-item-desc__phone:before {
+  content: " ";
+  background: url(phone.svg) no-repeat;
+  width: 20px;
+  display: inline-block;
+  height: 11px;
+  background-size: 13px 13px;
 }
 
 

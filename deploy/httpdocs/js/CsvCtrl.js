@@ -1,11 +1,9 @@
 var myApp = angular.module('myApp', []);
 
 function CsvCtrl($scope, $filter) {
-    // init
-    // 
+
     window.scope = $scope;
     //
-    $scope.sortingOrder = sortingOrder;
     $scope.reverse = false;
     $scope.filteredItems = [];
     $scope.groupedItems = [];
@@ -13,6 +11,25 @@ function CsvCtrl($scope, $filter) {
     $scope.pagedItems = [];
     $scope.currentPage = 0;
     $scope.items = [];
+
+    $scope.localisations = [{
+        id: 'UK',
+        country: "Country",
+        firstName: 'First_Name',
+        lastName: 'Last_Name',
+        email: 'Email',
+        phone: 'Telephone_number',
+        photo: 'Upload_photo'
+    }, {
+        id: 'NL',
+        country: "Land",
+        firstName: 'Voornaam',
+        lastName: 'Achternaam',
+        email: 'Email',
+        phone: 'Telefoonnummer',
+        photo: 'Upload_foto'
+    }];
+    $scope.localisation = null;
 
 
     $scope.setFile = function(element) {
@@ -26,30 +43,14 @@ function CsvCtrl($scope, $filter) {
 
 
                     var str = e.target.result; // load file values
+                    str = str.replace(/\t/g, ',');
                     var lines = str.split(/[\r\n|\n]+/); // split data by line
                     var header = str.match(/^(.*)$/m)[0];
                     header = header.replace(/[^\S\n]/gi, "_");
                     str = str.replace(/^(.*)$/m, header);
 
-
-                    // for every line, remove formatting characters
-                    // for(i = 0; i < lines.length; i++) {
-                    //     lines[i] = lines[i].replace(/(\r\n|\n|\r|)/gm, "").split(/[,;]/); // remove formatting and split by comma OR semi colon
-                    //     //lines[i] = lines[i].filter(function(x) {
-                    //    //     if(x != "") return true;
-                    //    // }); // filter out null members
-                    //     //if it isn't a comment line
-                    //     if(lines[i][0][0] != "#") {
-                    //         // cast all members to correct type 
-                    //         for(x = 0; x < lines[i].length; x++) {
-                    //             // try float
-                    //             var result = parseFloat(lines[i][x]);
-                    //             // check if cast ok and set value
-                    //             if(!isNaN(result)) lines[i][x] = result;
-                    //         }
-                    //         // push line 
-                    //     }
-                    // }
+                    $scope.localisation = $scope.detectLanguage(header);
+                    str = $scope.translateFile(str);
 
 
                     var jsonobject = csvjson.csv2json(str);
@@ -59,60 +60,70 @@ function CsvCtrl($scope, $filter) {
 
                     $scope.$apply();
 
-
-
                 };
             })($scope.theFile);
 
-            // Read in the image file as a data URL.
             reader.readAsText($scope.theFile);
 
         });
     };
 
+    $scope.detectLanguage = function(header) {
 
-    var parseFile = function(event) {
+        for (var i in $scope.localisations) {
 
-            var files = evt.target.files;
-        };
+            var localisation = $scope.localisations[i];
+
+            if (header.indexOf(localisation.country) !== -1) return localisation;
+
+        }
+
+        return null;
+    };
+
+    $scope.translateFile = function(str) {
+
+        str = str.replace($scope.localisation.firstName, 'First_Name');
+        str = str.replace($scope.localisation.lastName, 'Last_Name');
+        str = str.replace($scope.localisation.email, 'Email');
+        str = str.replace($scope.localisation.phone, 'Telephone_number');
+        str = str.replace($scope.localisation.photo, 'Upload_photo');
+
+        return str;
+    };
 
     var searchMatch = function(haystack, needle) {
-            if(!needle) {
-                return true;
-            }
-            return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
-        };
+        if (!needle) {
+            return true;
+        }
+        return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
+    };
 
-    // init the filtered items
+
     $scope.search = function() {
         $scope.filteredItems = $filter('filter')($scope.items, function(item) {
-            for(var attr in item) {
-
-
-
-                if(searchMatch(item[attr].toString(), $scope.query)) return true;
+            for (var attr in item) {
+                if (searchMatch(item[attr].toString(), $scope.query)) return true;
             }
             return false;
         });
-        // take care of the sorting order
-        if($scope.sortingOrder !== '') {
-            $scope.filteredItems = $filter('orderBy')($scope.filteredItems, $scope.sortingOrder, $scope.reverse);
-        }
+       
         $scope.currentPage = 0;
-        // now group by pages
+
         $scope.groupToPages();
     };
 
     $scope.clearSearch = function() {
-
+        $scope.query = "";
+        $scope.search();
     };
 
-    // calculate page in place
+
     $scope.groupToPages = function() {
         $scope.pagedItems = [];
 
-        for(var i = 0; i < $scope.filteredItems.length; i++) {
-            if(i % $scope.itemsPerPage === 0) {
+        for (var i = 0; i < $scope.filteredItems.length; i++) {
+            if (i % $scope.itemsPerPage === 0) {
                 $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)] = [$scope.filteredItems[i]];
             } else {
                 $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)].push($scope.filteredItems[i]);
@@ -122,24 +133,24 @@ function CsvCtrl($scope, $filter) {
 
     $scope.range = function(start, end) {
         var ret = [];
-        if(!end) {
+        if (!end) {
             end = start;
             start = 0;
         }
-        for(var i = start; i < end; i++) {
+        for (var i = start; i < end; i++) {
             ret.push(i);
         }
         return ret;
     };
 
     $scope.prevPage = function() {
-        if($scope.currentPage > 0) {
+        if ($scope.currentPage > 0) {
             $scope.currentPage--;
         }
     };
 
     $scope.nextPage = function() {
-        if($scope.currentPage < $scope.pagedItems.length - 1) {
+        if ($scope.currentPage < $scope.pagedItems.length - 1) {
             $scope.currentPage++;
         }
     };
@@ -148,22 +159,6 @@ function CsvCtrl($scope, $filter) {
         $scope.currentPage = this.n;
     };
 
-    // functions have been describe process the data for display
     $scope.search();
-
-    // change sorting order
-    $scope.sort_by = function(newSortingOrder) {
-        if($scope.sortingOrder == newSortingOrder) $scope.reverse = !$scope.reverse;
-
-        $scope.sortingOrder = newSortingOrder;
-
-        // icon setup
-        $('th i').each(function() {
-            // icon reset
-            $(this).removeClass().addClass('icon-sort');
-        });
-        if($scope.reverse) $('th.' + new_sorting_order + ' i').removeClass().addClass('icon-chevron-up');
-        else $('th.' + new_sorting_order + ' i').removeClass().addClass('icon-chevron-down');
-    };
-};
+}
 CsvCtrl.$inject = ['$scope', '$filter'];
