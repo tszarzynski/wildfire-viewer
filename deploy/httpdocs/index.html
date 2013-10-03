@@ -54,9 +54,9 @@
                       <input type="radio" name="displayMode-input" value="0" ng-model="displayMode" ng-click="updateDisplayMode()" >
                       <div class="topcoat-radio-button__checkmark"></div>Display all ({{items.length}})
                     </label>
-                    <label class="topcoat-radio-button">
+                    <label class="topcoat-radio-button" >
                       
-                      <input type="radio" name="displayMode-input" value="1" ng-model="displayMode" ng-click="updateDisplayMode()">
+                      <input type="radio" name="displayMode-input" value="1" ng-model="displayMode" ng-click="updateDisplayMode()" ng-disabled="bookmarkedItems.length == 0">
                       <div class="topcoat-radio-button__checkmark"></div>Display bookmarks ({{bookmarkedItems.length}})
                     </label>
                 </div>
