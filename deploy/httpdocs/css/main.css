@@ -123,6 +123,10 @@ h1 {
 .list {
   width: 100%;
    overflow: hidden;
+   cursor: auto;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
 }
 
 .list__item {
@@ -145,7 +149,7 @@ h1 {
 
 .list-item__img {
    max-height: 480px;
-  width: 100%;
+   max-width: 100%;
 }
 
 .list-item__desc {
