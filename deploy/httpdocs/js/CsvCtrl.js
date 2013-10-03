@@ -246,11 +246,14 @@ function CsvCtrl($scope, $filter) {
 
     $scope.updateDisplayMode = function() {
 
-        $scope.bookmarkedItems = $filter('filter')($scope.items, $scope.isFavourited);
+        $scope.bookmarkedItems = $filter('filter')($scope.items, function(item) {
+            return item.isFavourited;
+        });
 
         $scope.currentPage = 0;
 
-        $scope.groupToPages($scope.bookmarkedItems);
+        if ($scope.displayMode == 1) $scope.groupToPages($scope.bookmarkedItems);
+        else $scope.groupToPages($scope.items);
     };
 
     $scope.updateBookmarksCount = function() {
