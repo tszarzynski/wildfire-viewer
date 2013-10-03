@@ -114,6 +114,22 @@ h1 {
   margin-left: 12px;
 }
 
+
+.displayMode {
+  padding: 12px 0;
+  float: left;
+  margin-left: 20px;
+  margin-top: 6px;
+}
+
+.displayMode label {
+  margin-right: 20px;
+}
+
+.displayMode .topcoat-radio-button__checkmark {
+  margin-right: 6px;
+}
+
 .pagination {
   float:right;
   padding: 12px 0;
@@ -131,7 +147,7 @@ h1 {
 
 .list__item {
    max-width: 33%;
-   min-height: 650px;
+   min-height: 660px;
    position: relative;
    overflow: hidden;
    float: left;
@@ -162,6 +178,19 @@ h1 {
   box-sizing: border-box;
 }
 
+.list-item-desc__info
+{
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.list-item-desc__bookmark {
+  padding-top: 12px;
+}
+
+.list-item-desc__username {
+  margin-bottom: 0px;
+}
+
 .list-item-desc__username:before {
   content: " ";
   background: url(user.svg) no-repeat;
@@ -169,6 +198,10 @@ h1 {
   display: inline-block;
   height: 14px;
   background-size: 13px 13px;
+}
+
+.list-item-desc__email {
+  margin-top: 0px;
 }
 
 .list-item-desc__email:before {

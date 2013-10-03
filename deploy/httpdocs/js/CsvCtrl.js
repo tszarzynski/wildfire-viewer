@@ -5,6 +5,7 @@ function CsvCtrl($scope, $filter) {
     window.scope = $scope;
     //
     $scope.filteredItems = [];
+    $scope.bookmarkedItems = [];
     $scope.groupedItems = [];
     $scope.itemsPerPage = 9;
     $scope.pagedItems = [];
@@ -32,6 +33,8 @@ function CsvCtrl($scope, $filter) {
         photo: 'Upload_foto'
     }];
     $scope.localisation = null;
+
+    $scope.displayMode = "0";
 
 
     $scope.setFile = function(element) {
@@ -109,8 +112,21 @@ function CsvCtrl($scope, $filter) {
     };
 
 
+    $scope.isFavourited = function(item) {
+
+        if($scope.displayMode == 0)  return true;
+    
+        else if (item.isFavourited === true) return true;
+
+        return false;
+    };
+
     $scope.search = function() {
-        $scope.filteredItems = $filter('filter')($scope.items, function(item) {
+
+
+        var itemsToSearchIn = $scope.displayMode == 0 ? $scope.items : $scope.bookmarkedItems;
+
+        $scope.filteredItems = $filter('filter')(itemsToSearchIn, function(item) {
             for (var attr in item) {
                 if (searchMatch(item[attr].toString(), $scope.query)) return true;
             }
@@ -119,7 +135,7 @@ function CsvCtrl($scope, $filter) {
 
         $scope.currentPage = 0;
 
-        $scope.groupToPages();
+        $scope.groupToPages($scope.filteredItems);
     };
 
     $scope.clearSearch = function() {
@@ -128,14 +144,14 @@ function CsvCtrl($scope, $filter) {
     };
 
 
-    $scope.groupToPages = function() {
+    $scope.groupToPages = function(itemsToGroup) {
         $scope.pagedItems = [];
 
-        for (var i = 0; i < $scope.filteredItems.length; i++) {
+        for (var i = 0; i < itemsToGroup.length; i++) {
             if (i % $scope.itemsPerPage === 0) {
-                $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)] = [$scope.filteredItems[i]];
+                $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)] = [itemsToGroup[i]];
             } else {
-                $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)].push($scope.filteredItems[i]);
+                $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)].push(itemsToGroup[i]);
             }
         }
 
@@ -190,8 +206,6 @@ function CsvCtrl($scope, $filter) {
 
     $scope.updatePagination = function() {
 
-        console.log($scope.paginationStart, $scope.currentPage, $scope.paginationEnd);
-
         if ($scope.paginationStart < $scope.currentPage && $scope.currentPage < $scope.paginationEnd) {
 
         }
@@ -228,6 +242,21 @@ function CsvCtrl($scope, $filter) {
 
         $scope.paginationEnd = $scope.paginationStart + $scope.paginationSize < $scope.pagedItems.length ? $scope.paginationStart + $scope.paginationSize : $scope.pagedItems.length;
 
+    };
+
+    $scope.updateDisplayMode = function() {
+
+        $scope.bookmarkedItems = $filter('filter')($scope.items, $scope.isFavourited);
+
+        $scope.currentPage = 0;
+
+        $scope.groupToPages($scope.bookmarkedItems);
+    };
+
+    $scope.updateBookmarksCount = function() {
+         $scope.bookmarkedItems = $filter('filter')($scope.items, function(item) {
+            return item.isFavourited;
+        });
     };
 
     $scope.search();
