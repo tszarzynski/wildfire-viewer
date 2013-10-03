@@ -4,13 +4,15 @@ function CsvCtrl($scope, $filter) {
 
     window.scope = $scope;
     //
-    $scope.reverse = false;
     $scope.filteredItems = [];
     $scope.groupedItems = [];
     $scope.itemsPerPage = 9;
     $scope.pagedItems = [];
     $scope.currentPage = 0;
     $scope.items = [];
+    $scope.paginationStart = 0;
+    $scope.paginationEnd = 0;
+    $scope.paginationSize = 5;
 
     $scope.localisations = [{
         id: 'UK',
@@ -58,6 +60,8 @@ function CsvCtrl($scope, $filter) {
                     $scope.items = jsonobject.rows;
                     $scope.search();
 
+                    $scope.updatePagination();
+
                     $scope.$apply();
 
                 };
@@ -94,7 +98,7 @@ function CsvCtrl($scope, $filter) {
 
     $scope.parseFile = function() {
 
-        
+
     };
 
     var searchMatch = function(haystack, needle) {
@@ -112,7 +116,7 @@ function CsvCtrl($scope, $filter) {
             }
             return false;
         });
-       
+
         $scope.currentPage = 0;
 
         $scope.groupToPages();
@@ -134,6 +138,8 @@ function CsvCtrl($scope, $filter) {
                 $scope.pagedItems[Math.floor(i / $scope.itemsPerPage)].push($scope.filteredItems[i]);
             }
         }
+
+        $scope.updatePagination();
     };
 
     $scope.range = function(start, end) {
@@ -152,16 +158,76 @@ function CsvCtrl($scope, $filter) {
         if ($scope.currentPage > 0) {
             $scope.currentPage--;
         }
+
+        $scope.updatePagination();
     };
 
     $scope.nextPage = function() {
         if ($scope.currentPage < $scope.pagedItems.length - 1) {
             $scope.currentPage++;
         }
+
+        $scope.updatePagination();
+    };
+
+    $scope.firstPage = function() {
+        $scope.currentPage = 0;
+
+        $scope.updatePagination();
+    };
+
+    $scope.lastPage = function() {
+        $scope.currentPage = $scope.pagedItems.length - 1;
+
+        $scope.updatePagination();
     };
 
     $scope.setPage = function() {
         $scope.currentPage = this.n;
+
+        $scope.updatePagination();
+    };
+
+    $scope.updatePagination = function() {
+
+        console.log($scope.paginationStart, $scope.currentPage, $scope.paginationEnd);
+
+        if ($scope.paginationStart < $scope.currentPage && $scope.currentPage < $scope.paginationEnd) {
+
+        }
+        else if ($scope.currentPage < $scope.paginationStart) {
+
+            $scope.paginationStart = $scope.currentPage;
+        }
+        else if ($scope.currentPage >= $scope.paginationEnd) {
+
+            $scope.paginationStart = $scope.currentPage + $scope.paginationSize < $scope.pagedItems.length ? $scope.currentPage : $scope.pagedItems.length - $scope.paginationSize;
+        }
+
+        $scope.paginationEnd = $scope.paginationStart + $scope.paginationSize < $scope.pagedItems.length ? $scope.paginationStart + $scope.paginationSize : $scope.pagedItems.length;
+    };
+
+    $scope.nextPagination = function() {
+
+        if ($scope.paginationStart + $scope.paginationSize < $scope.pagedItems.length - 1) {
+            $scope.paginationStart += $scope.paginationSize;
+        } else {
+            $scope.paginationStart = $scope.pagedItems.length - $scope.paginationSize;
+        }
+
+        $scope.paginationEnd = $scope.paginationStart + $scope.paginationSize < $scope.pagedItems.length ? $scope.paginationStart + $scope.paginationSize : $scope.pagedItems.length;
+    };
+
+    $scope.prevPagination = function() {
+
+        if ($scope.paginationStart - $scope.paginationSize > 0) {
+            $scope.paginationStart -= $scope.paginationSize;
+        } else {
+            $scope.paginationStart = 0;
+        }
+
+        $scope.paginationEnd = $scope.paginationStart + $scope.paginationSize < $scope.pagedItems.length ? $scope.paginationStart + $scope.paginationSize : $scope.pagedItems.length;
+
     };
 
     $scope.search();

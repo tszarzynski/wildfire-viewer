@@ -39,7 +39,7 @@
         <div>
 
 
-            <div class='buttons-bar'>
+            <div class='buttons-bar' ng-show="items.length > 0">
 
                 <!-- Search -->
                 <div class="search topcoat-button-bar">
@@ -49,15 +49,26 @@
 
                 <!-- Pagination -->
                 <div class="pagination topcoat-button-bar">
-                    <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == 0}">
-                        <button class="topcoat-button--large" ng-click="prevPage()">« Prev</button>
+                    <div class="topcoat-button-bar__item" >
+                        <button class="topcoat-button--large" ng-click="firstPage()" ng-disabled="currentPage == 0">First</button>
+                    </div>
+                    <div class="topcoat-button-bar__item" >
+                        <button class="topcoat-button--large" ng-click="prevPage()" ng-disabled=" currentPage == 0">« Prev</button>
                     </div>
 
-                    <div class="topcoat-button-bar__item" ng-repeat="n in range(pagedItems.length)">
+                    <button class="topcoat-button--large--quiet" ng-show="paginationStart > 0" ng-click="prevPagination()">...</button>
+                   
+                    <div class="topcoat-button-bar__item" ng-repeat="n in range(paginationStart, paginationEnd)">
                         <button class="topcoat-button--large--quiet" ng-bind="n + 1" ng-disabled="n == currentPage" ng-click="setPage()">1</button>
                     </div>
-                    <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == pagedItems.length - 1}">
-                        <button class="topcoat-button--large" ng-click="nextPage()">Next »</button>
+
+                    <button class="topcoat-button--large--quiet" ng-show="paginationEnd < pagedItems.length" ng-click="nextPagination()">...</button>
+
+                    <div class="topcoat-button-bar__item" >
+                        <button class="topcoat-button--large" ng-click="nextPage()" ng-disabled="currentPage == pagedItems.length - 1">Next »</button>
+                    </div>
+                    <div class="topcoat-button-bar__item" >
+                        <button class="topcoat-button--large" ng-click="lastPage()" ng-disabled="currentPage == pagedItems.length - 1">Last</button>
                     </div>
                 </div>
             </div>
@@ -66,7 +77,7 @@
 
 
             <ul class="list" >
-                <li class="list__item" ng-repeat="item in pagedItems[currentPage] | orderBy:sortingOrder:reverse">
+                <li class="list__item" ng-repeat="item in pagedItems[currentPage] ">
                     <div class="list-item__inner">
                     <img class="list-item__img" ng-src="{{item['Upload_photo']}}">
                         <div class="list-item__desc">
@@ -77,25 +88,36 @@
                 </li>
             </ul>
 
-            <div class='buttons-bar'>
+            <div class='buttons-bar' ng-show="items.length > 0">
                 <!-- Pagination -->
                 <div class="pagination topcoat-button-bar">
-                    <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == 0}">
-                        <button class="topcoat-button--large" ng-click="prevPage()">« Prev</button>
+                    <div class="topcoat-button-bar__item" >
+                        <button class="topcoat-button--large" ng-click="firstPage()" ng-disabled="currentPage == 0">First</button>
+                    </div>
+                    <div class="topcoat-button-bar__item" >
+                        <button class="topcoat-button--large" ng-click="prevPage()" ng-disabled=" currentPage == 0">« Prev</button>
                     </div>
 
-                    <div class="topcoat-button-bar__item" ng-repeat="n in range(pagedItems.length)">
+                    <button class="topcoat-button--large--quiet" ng-show="paginationStart > 0" ng-click="prevPagination()">...</button>
+                   
+                    <div class="topcoat-button-bar__item" ng-repeat="n in range(paginationStart, paginationEnd)">
                         <button class="topcoat-button--large--quiet" ng-bind="n + 1" ng-disabled="n == currentPage" ng-click="setPage()">1</button>
                     </div>
-                    <div class="topcoat-button-bar__item" ng-class="{disabled: currentPage == pagedItems.length - 1}">
-                        <button class="topcoat-button--large" ng-click="nextPage()">Next »</button>
+
+                    <button class="topcoat-button--large--quiet" ng-show="paginationEnd < pagedItems.length - 1" ng-click="nextPagination()">...</button>
+
+                    <div class="topcoat-button-bar__item" >
+                        <button class="topcoat-button--large" ng-click="nextPage()" ng-disabled="currentPage == pagedItems.length - 1">Next »</button>
+                    </div>
+                    <div class="topcoat-button-bar__item" >
+                        <button class="topcoat-button--large" ng-click="lastPage()" ng-disabled="currentPage == pagedItems.length - 1">Last</button>
                     </div>
                 </div>
+            </div>
             </div>
 
         </div>
 
-    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
