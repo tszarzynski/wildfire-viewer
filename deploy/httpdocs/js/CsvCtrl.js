@@ -92,6 +92,11 @@ function CsvCtrl($scope, $filter) {
         return str;
     };
 
+    $scope.parseFile = function() {
+
+        
+    };
+
     var searchMatch = function(haystack, needle) {
         if (!needle) {
             return true;

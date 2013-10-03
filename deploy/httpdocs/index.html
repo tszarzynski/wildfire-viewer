@@ -23,7 +23,7 @@
                 <div>File name: {{theFile.name}}</div>
                 <div>Localisation: 
                     <span  class="nullable">
-                    <select ng-model="localisation" ng-options="l.id for l in localisations">
+                    <select ng-model="localisation" ng-options="l.id for l in localisations" ng-change="parseFile()" disabled>
                         <option value="">-- auto detect --</option>
                     </select>
                     </span>
