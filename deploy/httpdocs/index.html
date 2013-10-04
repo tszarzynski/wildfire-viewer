@@ -47,7 +47,7 @@
                     <button class="search-clear topcoat-button--large" ng-click="clearSearch()">Clear</button>
                 </div>
 
-                <!-- Dsiplay options -->
+                <!-- Display options -->
                 <div class="displayMode">
                     <label class="topcoat-radio-button">
   
@@ -60,6 +60,12 @@
                       <div class="topcoat-radio-button__checkmark"></div>Display bookmarks ({{bookmarkedItems.length}})
                     </label>
                 </div>
+
+                <!-- Copty to clipboard -->
+                <div class="copy">
+                    <a class="copy-btn topcoat-button--large" ng-click="exportBookmarks()" ng-disabled="bookmarkedItems.length == 0">Copy bookmarks to clipboard</a>
+                </div>
+
 
 
                 <!-- Pagination -->
@@ -91,7 +97,7 @@
 
 
 
-            <ul class="list" >
+            <ul class="list" ng-show="items.length > 0">
                 <li class="list__item" ng-repeat="item in pagedItems[currentPage] | filter:isFavourited:item">
                     <div class="list-item__inner">
                     <img class="list-item__img" ng-src="{{item['Upload_photo']}}">
@@ -144,6 +150,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
 
+    <script src="js/ZeroClipboard.min.js"></script>
     <script src="js/csvjson.min.js"></script>
     <script src="js/CsvCtrl.js"></script>
 </body>

@@ -262,6 +262,37 @@ function CsvCtrl($scope, $filter) {
         });
     };
 
+    $scope.exportBookmarks = function() {
+
+        var str = "";
+  
+
+        $scope.bookmarkedItems = $filter('filter')($scope.items, function(item) {
+            return item.isFavourited;
+        });
+
+        for (var i in $scope.bookmarkedItems) {
+            
+            var bookmark = $scope.bookmarkedItems[i];
+          
+            str += bookmark["First_Name"] + " " + bookmark["Last_Name"] + " <" + bookmark['Email'] + "> ";
+            str += bookmark['Upload_photo'];
+            if (i < $scope.bookmarkedItems.length - 1) str += " |       | ";
+
+        }
+        
+        str = str.replace(/\r?\n|\r/g, " ");
+
+        return str;
+    };
+
     $scope.search();
+
+    ZeroClipboard.setDefaults( { moviePath: 'swf/ZeroClipboard.swf' } );
+    $scope.clip = new ZeroClipboard($('.copy-btn'));
+
+    $scope.clip.on( 'dataRequested', function (client, args) {
+        client.setText( $scope.exportBookmarks() );
+    });
 }
 CsvCtrl.$inject = ['$scope', '$filter'];
